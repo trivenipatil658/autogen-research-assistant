@@ -1,4 +1,6 @@
 def build_manager_task(topic: str) -> str:
+    # Builds the task prompt for the Manager Agent
+    # Tells it to create a structured execution plan for all other agents based on the topic
     return (
         f"The user wants a research workflow on this topic: {topic}. "
         "Create a short execution plan for the research agent, summarizer agent, "
@@ -7,7 +9,9 @@ def build_manager_task(topic: str) -> str:
 
 
 def build_research_task(topic: str, manager_text: str, web_context: str = "") -> str:
-    web_section = f"\n\nWeb Search Context:\n{web_context}" if web_context else ""
+    # Builds the task prompt for the Research Agent
+    # Includes the manager's plan and optional web search results as context
+    web_section = f"\n\nWeb Search Context:\n{web_context}" if web_context else ""  # Only add web section if results exist
     return (
         f"Topic: {topic}\n\n"
         f"Manager plan:\n{manager_text}"
@@ -17,6 +21,8 @@ def build_research_task(topic: str, manager_text: str, web_context: str = "") ->
 
 
 def build_summary_task(topic: str, manager_text: str, research_text: str) -> str:
+    # Builds the task prompt for the Summarizer Agent
+    # Passes the manager plan and full research output so it can condense it for students
     return (
         f"Topic: {topic}\n\n"
         f"Manager plan:\n{manager_text}\n\n"
@@ -26,6 +32,8 @@ def build_summary_task(topic: str, manager_text: str, research_text: str) -> str
 
 
 def build_fact_check_task(topic: str, manager_text: str, summary_text: str) -> str:
+    # Builds the task prompt for the Fact-Checker Agent
+    # Passes the summary so it can verify accuracy and flag any misleading claims
     return (
         f"Topic: {topic}\n\n"
         f"Manager plan:\n{manager_text}\n\n"
@@ -35,6 +43,8 @@ def build_fact_check_task(topic: str, manager_text: str, summary_text: str) -> s
 
 
 def build_writer_task(topic: str, manager_text: str, summary_text: str, fact_check_text: str, citations: str = "") -> str:
+    # Builds the task prompt for the Writer Agent
+    # Passes verified summary + fact-check notes + citations so it can produce the final report and PPT outline
     return (
         f"Topic: {topic}\n\n"
         f"Manager plan:\n{manager_text}\n\n"
@@ -43,11 +53,13 @@ def build_writer_task(topic: str, manager_text: str, summary_text: str, fact_che
         "2. A slide-wise PPT outline (label each slide clearly as 'Slide N: Title')\n\n"
         f"SUMMARY:\n{summary_text}\n\n"
         f"FACT-CHECK NOTES:\n{fact_check_text}"
-        + (f"\n\nCITATIONS:\n{citations}" if citations else "")
+        + (f"\n\nCITATIONS:\n{citations}" if citations else "")  # Append citations only if they exist
     )
 
 
 def build_reviewer_task(topic: str, manager_text: str, writer_text: str) -> str:
+    # Builds the task prompt for the Reviewer Agent
+    # Passes the writer's output so it can polish, restructure, and improve the final report
     return (
         f"Topic: {topic}\n\n"
         f"Manager plan:\n{manager_text}\n\n"
