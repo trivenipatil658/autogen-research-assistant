@@ -1,0 +1,8 @@
+autogen-agentchat
+autogen-ext[openai]
+python-dotenv
+requests
+streamlit
+python-pptx
+python-docx
+fpdf2

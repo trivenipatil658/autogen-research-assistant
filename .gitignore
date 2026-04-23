@@ -1,0 +1,25 @@
+# Virtual environment
+.venv/
+
+# Environment variables
+.env
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# VS Code settings
+.vscode/
+
+# Output files
+outputs/*.txt
+outputs/*.pptx
+outputs/*.docx
+outputs/*.pdf
+outputs/*.md
+
+# OS files
+.DS_Store
+Thumbs.db

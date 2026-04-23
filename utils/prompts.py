@@ -1,0 +1,58 @@
+def build_manager_task(topic: str) -> str:
+    return (
+        f"The user wants a research workflow on this topic: {topic}. "
+        "Create a short execution plan for the research agent, summarizer agent, "
+        "fact-checker agent, writer agent, and reviewer agent."
+    )
+
+
+def build_research_task(topic: str, manager_text: str, web_context: str = "") -> str:
+    web_section = f"\n\nWeb Search Context:\n{web_context}" if web_context else ""
+    return (
+        f"Topic: {topic}\n\n"
+        f"Manager plan:\n{manager_text}"
+        f"{web_section}\n\n"
+        "Now research this topic in a clear and structured way. Cite sources using [n] where relevant."
+    )
+
+
+def build_summary_task(topic: str, manager_text: str, research_text: str) -> str:
+    return (
+        f"Topic: {topic}\n\n"
+        f"Manager plan:\n{manager_text}\n\n"
+        f"Research content:\n{research_text}\n\n"
+        "Summarize this clearly for students."
+    )
+
+
+def build_fact_check_task(topic: str, manager_text: str, summary_text: str) -> str:
+    return (
+        f"Topic: {topic}\n\n"
+        f"Manager plan:\n{manager_text}\n\n"
+        f"Summary to verify:\n{summary_text}\n\n"
+        "Check correctness, clarity, and misleading claims. Suggest corrections if needed."
+    )
+
+
+def build_writer_task(topic: str, manager_text: str, summary_text: str, fact_check_text: str, citations: str = "") -> str:
+    return (
+        f"Topic: {topic}\n\n"
+        f"Manager plan:\n{manager_text}\n\n"
+        "Using the verified content below, generate:\n"
+        "1. A clean final report\n"
+        "2. A slide-wise PPT outline (label each slide clearly as 'Slide N: Title')\n\n"
+        f"SUMMARY:\n{summary_text}\n\n"
+        f"FACT-CHECK NOTES:\n{fact_check_text}"
+        + (f"\n\nCITATIONS:\n{citations}" if citations else "")
+    )
+
+
+def build_reviewer_task(topic: str, manager_text: str, writer_text: str) -> str:
+    return (
+        f"Topic: {topic}\n\n"
+        f"Manager plan:\n{manager_text}\n\n"
+        "Review and improve the following final output. "
+        "Make it clearer, more professional, better structured, and remove repetition "
+        "without changing the meaning.\n\n"
+        f"{writer_text}"
+    )
